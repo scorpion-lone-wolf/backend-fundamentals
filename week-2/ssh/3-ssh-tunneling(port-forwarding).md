@@ -117,3 +117,15 @@ ssh -i /path/to/your-key.pem \
   -L <local_port>:<target_host>:<target_port> \
   ec2-user@ec2-xx-xx-xx-xx.compute-1.amazonaws.com
 ```
+
+Example :
+
+```bash
+ssh -L 8080:localhost:9090 user@remote-server
+```
+
+8080 (Local Port): The port YOUR computer opens and listens on.
+
+localhost (Destination Host): Evaluated from the server's perspective (meaning the remote server itself not your local computer).
+
+9090 (Destination Port): The port on the remote server where the traffic is dropped off.
