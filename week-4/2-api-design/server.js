@@ -1,7 +1,9 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
 import { deleteProduct, getAllProducts, getProductById, updateProduct } from "./product.api.js";
+import { productSchema } from "./product.schema.js";
 import { swaggerSpec } from "./swagger.js";
+import { validateProductData } from "./validate.js";
 
 const PORT = 3007;
 
@@ -44,7 +46,7 @@ app.use(express.json());
  *         description: Product created successfully
  */
 // ✅ Create product
-app.post("/products", (req, res) => {
+app.post("/products", validateProductData(productSchema), (req, res) => {
   const newProduct = req.body;
   createProduct(newProduct);
   res.status(201).json(newProduct);
