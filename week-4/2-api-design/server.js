@@ -67,6 +67,24 @@ app.get("/products", (req, res) => {
   res.json({ message: "Get all products", data: products });
 });
 
+/**
+ * @swagger
+ * /products/{id}:
+ *   get:
+ *     summary: Get a product by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Product ID
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Product found
+ *       404:
+ *         description: Product not found
+ */
 // ✅ Get product by ID
 app.get("/products/:id", (req, res) => {
   const productId = req.params.id;
@@ -79,6 +97,70 @@ app.get("/products/:id", (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /products/{id}:
+ *   put:
+ *     summary: Update a product by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Product ID
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               category:
+ *                 type: string
+ *               brand:
+ *                 type: string
+ *               stock:
+ *                 type: number
+ *               rating:
+ *                 type: number
+ *               isAvailable:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: Product updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: string
+ *                 name:
+ *                   type: string
+ *                 description:
+ *                   type: string
+ *                 price:
+ *                   type: number
+ *                 category:
+ *                   type: string
+ *                 brand:
+ *                   type: string
+ *                 stock:
+ *                   type: number
+ *                 rating:
+ *                   type: number
+ *                 isAvailable:
+ *                   type: boolean
+ *       404:
+ *         description: Product not found
+ */
 // ✅ Update product
 app.put("/products/:id", (req, res) => {
   const productId = req.params.id;
@@ -95,6 +177,26 @@ app.put("/products/:id", (req, res) => {
     res.status(404).json({ message: "Product not found" });
   }
 });
+
+/**
+ *
+ * @swagger
+ * /products/{id}:
+ *   delete:
+ *     summary: Delete a product by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Product ID
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Product deleted successfully
+ *       404:
+ *         description: Product not found
+ */
 
 // ✅ Delete product
 app.delete("/products/:id", (req, res) => {
