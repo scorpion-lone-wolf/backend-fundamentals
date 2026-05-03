@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Comment Box (Vulnerable)</title>
+  </head>
+  <body>
+    <h2>Comment Box</h2>
+
+    <form method="POST" action="/comment">
+      <input
+        type="text"
+        name="comment"
+        placeholder="Write a comment..."
+        required
+        style="width: 300px"
+      />
+      <button type="submit">Post</button>
+    </form>
+
+    <h3>All Comments:</h3>
+    <ul id="comments"></ul>
+
+    <script>
+      // Fetch and render comments
+      fetch("/comments")
+        .then(res => res.json())
+        .then(data => {
+          const list = document.getElementById("comments");
+
+          data.forEach(comment => {
+            const li = document.createElement("li");
+
+            // ❌ VULNERABLE: using innerHTML
+            // li.innerHTML = comment;
+            // ✅ use textContent
+            li.textContent = comment;
+
+            list.appendChild(li);
+          });
+        });
+    </script>
+  </body>
+</html>
