@@ -1,0 +1,17 @@
+{
+  "name": "1-music-streaming-service(uses-partial-response)",
+  "version": "1.0.0",
+  "description": "- Create a small web server (Node.js or any language you prefer) - Store a few music files on the server",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
