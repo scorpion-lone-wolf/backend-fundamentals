@@ -1,0 +1,17 @@
+{
+  "name": "2-real-time-log-streamer(uses-http-streaming)",
+  "version": "1.0.0",
+  "description": "- Create a web server - Prepare a data source for log messages (could be an array, a file, or generated strings)",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Streamer</title>
+  </head>
+  <body>
+    <div style="background-color: teal; min-width: 600px; min-height: 800px; padding: 20px">
+      <h2 id="log-header">My Logs</h2>
+      <pre id="log"></pre>
+    </div>
+
+    <script>
+      // Move script to the bottom of body, or wrap in DOMContentLoaded
+      const logElement = document.getElementById("log");
+
+      if (!logElement) {
+        console.error("Log element not found!");
+      } else {
+        try {
+          const eventSource = new EventSource("http://localhost:8080/get-log");
+
+          eventSource.onmessage = event => {
+            const parsedData = JSON.parse(event.data);
+            console.log("Received:", parsedData);
+            // Use += to append, but consider creating new elements for better formatting
+            logElement.textContent += parsedData;
+
+            // Auto-scroll to bottom if needed
+            // logElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          };
+
+          eventSource.onerror = error => {
+            console.error("EventSource error:", error);
+            logElement.textContent += "\n[Connection Error]";
+          };
+
+          eventSource.onopen = () => {
+            console.log("Connected to log stream");
+            logElement.textContent += "[Connected to log stream]\n";
+          };
+        } catch (error) {
+          console.error("Fetch error:", error);
+          if (logElement) {
+            logElement.textContent = "Error connecting to log stream";
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
