@@ -13,7 +13,7 @@ SCP is a command-line tool for securely transferring files between a local machi
 ```bash
 scp -i /path/to/your-key.pem \
   /local/path/file.txt \
-  ec2-user@ec2-xx-xx-xx-xx.compute-1.amazonaws.com:/remote/path/
+  ec2-user@ec2-xx-xx-xx-xx.compute-1.amazonaws.com:/home
 ```
 
 **Copy an entire directory recursively:**
@@ -32,7 +32,7 @@ scp -i /path/to/your-key.pem -r \
 
 ```bash
 scp -i /path/to/your-key.pem \
-  ec2-user@ec2-xx-xx-xx-xx.compute-1.amazonaws.com:/remote/path/file.txt \
+  ec2-user@ec2-xx-xx-xx-xx.compute-1.amazonaws.com:/home/path/file.txt \
   /local/path/
 ```
 
