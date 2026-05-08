@@ -1,0 +1,19 @@
+{
+  "name": "3-resumable-file-upload-using-tus",
+  "version": "1.0.0",
+  "description": "- Create a server that can handle file uploads and store them - Use Tus protocol for resumable uploads",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tus/file-store": "^2.1.0",
+    "@tus/server": "^2.4.0",
+    "express": "^5.2.1"
+  }
+}

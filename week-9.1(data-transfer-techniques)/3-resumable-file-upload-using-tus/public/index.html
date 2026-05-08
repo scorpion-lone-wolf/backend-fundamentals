@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TUS Upload Demo</title>
+
+    <!-- tus-js-client -->
+    <script src="https://cdn.jsdelivr.net/npm/tus-js-client/dist/tus.min.js"></script>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 20px;
+      }
+
+      button {
+        margin-right: 10px;
+        margin-top: 10px;
+        padding: 8px 16px;
+        cursor: pointer;
+      }
+
+      #progress {
+        margin-top: 15px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>TUS File Upload</h2>
+
+    <input type="file" id="fileInput" />
+
+    <br />
+
+    <button id="startBtn">Start Upload</button>
+    <button id="pauseBtn">Pause</button>
+    <button id="resumeBtn">Resume</button>
+
+    <div id="progress">Progress: 0%</div>
+
+    <script>
+      const fileInput = document.getElementById("fileInput");
+      const startBtn = document.getElementById("startBtn");
+      const pauseBtn = document.getElementById("pauseBtn");
+      const resumeBtn = document.getElementById("resumeBtn");
+      const progressText = document.getElementById("progress");
+
+      let upload;
+      let selectedFile;
+
+      // Save selected file
+      fileInput.addEventListener("change", e => {
+        selectedFile = e.target.files[0];
+      });
+
+      // Start upload
+      startBtn.addEventListener("click", () => {
+        if (!selectedFile) {
+          alert("Please select a file");
+          return;
+        }
+
+        upload = new tus.Upload(selectedFile, {
+          endpoint: "http://localhost:3000/files",
+          chunkSize: 1024 * 50, // upload 50KB at a time
+          retryDelays: [0, 3000, 5000],
+
+          metadata: {
+            filename: selectedFile.name,
+            filetype: selectedFile.type,
+          },
+
+          onError: function (error) {
+            console.log("Upload failed:", error);
+          },
+
+          onProgress: function (bytesUploaded, bytesTotal) {
+            const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
+
+            progressText.innerText = `Progress: ${percentage}%`;
+          },
+
+          onSuccess: function () {
+            progressText.innerText = "Upload completed!";
+            console.log("File available at:", upload.url);
+          },
+        });
+
+        // Resume old upload if exists
+        upload.findPreviousUploads().then(previousUploads => {
+          if (previousUploads.length) {
+            upload.resumeFromPreviousUpload(previousUploads[0]);
+          }
+
+          upload.start();
+        });
+      });
+
+      // Pause upload
+      pauseBtn.addEventListener("click", () => {
+        if (upload) {
+          upload.abort();
+          console.log("Upload paused");
+        }
+      });
+
+      // Resume upload
+      resumeBtn.addEventListener("click", () => {
+        if (upload) {
+          upload.start();
+          console.log("Upload resumed");
+        }
+      });
+    </script>
+  </body>
+</html>
