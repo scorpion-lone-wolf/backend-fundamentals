@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package user; // this is the package name
+
+service UserService{
+rpc GetUser(GetUserRequest) returns (GetUserResponse);
+}
+
+// this is schema
+message GetUserRequest{
+    int32 id =1;
+}
+message GetUserResponse{
+    repeated User user = 1;
+    string staus =2;
+}
+// this is schema
+message User{
+    int32 id = 1;
+    string name = 2;
+}
+// This file is used to define the structure of the data and the service for gRPC Communication.
+// Basically this file is the contract between services.
+
