@@ -1,0 +1,29 @@
+{
+  "name": "1-session-based-auth",
+  "version": "1.0.0",
+  "description": "<!--  This folder contains information regarding session based authentication --> <!-- Lets look into the packages that we have used -->",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "better-sqlite3": "^12.10.0",
+    "connect-redis": "^9.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
+    "express-session": "^1.19.0",
+    "redis": "^5.12.1",
+    "zod": "^4.4.3"
+  }
+}
