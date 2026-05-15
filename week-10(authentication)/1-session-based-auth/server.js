@@ -120,7 +120,6 @@ app.post("/logout", (req, res) => {
         error: "Logout failed",
       });
     }
-
     // Remove session cookie from browser.
     res.clearCookie("connect.sid");
     return res.json({
@@ -128,7 +127,12 @@ app.post("/logout", (req, res) => {
     });
   });
 });
-
+// public route
+app.get("/", (req, res) => {
+  res.send({
+    success: true,
+  });
+});
 app.listen(process.env.PORT, () => {
   console.log("Server started at port", process.env.PORT);
 });
