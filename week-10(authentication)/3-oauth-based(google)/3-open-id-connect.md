@@ -57,8 +57,13 @@ In exchange for the authorization code, Google returns:
 
 ```json
 {
+  "sub": "123456789", // this is the unique Google user ID.
   "email": "john@gmail.com",
-  "sub": "123456789"
+  "name": "john",
+  "picture": "...",
+  "iss": "https://accounts.google.com", // who issue this token (based on this we can identify whether the user login with google or other OAuth)
+  "aud": "your-client-id", // used to verify if the token is genuine or not as it is secret key between us and google
+  "exp": 123456789 // time at which the token will expire
 }
 ```
 
@@ -66,5 +71,6 @@ In exchange for the authorization code, Google returns:
 
 3. Find or create the local user.
 4. Create your app session or JWT.
+5. Return Our token to user so that he can log in to our system
 
 ---
