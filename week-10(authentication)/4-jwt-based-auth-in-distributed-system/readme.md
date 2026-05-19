@@ -15,21 +15,7 @@
 
 ## High-level flow
 
-```mermaid
-flowchart LR
-  Client -->|POST /login| Gateway[Gateway (4000)]
-  Gateway -->|POST /login| AuthService[Auth Service (4001)]
-  AuthService -->|returns JWT| Gateway
-  Gateway -->|returns JWT| Client
-
-  Client -->|GET /orders (Bearer token)| Gateway
-  Gateway -->|GET /orders| OrderService[Order Service (4002)]
-  OrderService -->|fetch JWKS| AuthService
-  AuthService -->|returns JWKS| OrderService
-  OrderService -->|verify token| OrderService
-  OrderService -->|returns orders| Gateway
-  Gateway -->|returns orders| Client
-```
+![alt text](image.png)
 
 ## Detailed request flow
 
