@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  blog-db:
+    # This service runs the MySQL database.
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - my-blog-vol:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    container_name: my-db-container
+
+  blog-server:
+    # This service builds and runs the Express app.
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    container_name: my-blog-app-container
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./.env
+    volumes:
+      - ./:/app
+    depends_on:
+      - blog-db
+
+volumes:
+  my-blog-vol:
+    # This is a named volume for MySQL data.
+    # It keeps database files safe even if the MySQL container is removed.
