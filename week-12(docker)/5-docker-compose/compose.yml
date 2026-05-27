@@ -1,4 +1,4 @@
-version: "3.9"
+name: my-blog
 
 services:
   blog-db:
@@ -11,6 +11,8 @@ services:
     ports:
       - "3306:3306"
     container_name: my-db-container
+    networks:
+      - my-blog-network
 
   blog-server:
     # This service builds and runs the Express app.
@@ -26,8 +28,12 @@ services:
       - ./:/app
     depends_on:
       - blog-db
+    networks:
+      - my-blog-network
 
 volumes:
   my-blog-vol:
     # This is a named volume for MySQL data.
     # It keeps database files safe even if the MySQL container is removed.
+networks:
+  my-blog-network: # it will be bridge network
