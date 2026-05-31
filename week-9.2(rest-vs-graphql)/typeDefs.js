@@ -1,6 +1,7 @@
 export const typeDefs = `#graphql
     # Type definitions declare the shape of data in GraphQL.
     # Each type describes the fields that can be requested.
+    # ! sign means it is required field
 
     type User {
         id: ID!           # Unique identifier for the user
