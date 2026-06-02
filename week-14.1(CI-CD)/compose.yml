@@ -1,0 +1,70 @@
+# name: my-blog # name property is not allowed in compose when running with docker swarm
+
+services:
+  blog-db:
+    # This service runs the MySQL database.
+    image: mysql
+    deploy:
+      replicas: 1 # Docker Swarm make sure atleast 1 service is always running
+      # How to update to new version
+      update_config:
+        parallelism: 1
+        failure_action: rollback
+        delay: 5s
+        order: start-first
+      # How to rollback if error happens during update
+      rollback_config:
+        parallelism: 1
+        order: start-first
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -proot"]
+      interval: 30s
+      timeout: 30s
+      retries: 5
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - my-blog-vol:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - my-blog-overlay
+
+  blog-server:
+    image: pursotam/myblog:latest
+    ports:
+      - "3000:3000"
+    deploy:
+      replicas: 1 # Docker Swarm make sure atleast 1 service is always running
+      # How to update to new version
+      update_config:
+        parallelism: 1
+        failure_action: rollback
+        delay: 5s
+        order: start-first
+      # How to rollback if error happens during update
+      rollback_config:
+        parallelism: 1
+        order: start-first
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    # env_file is not supported in docker swarm , so we should use docker secret, here we are hardcording for now
+    environment:
+      - DB_HOST=blog-db
+      - DB_NAME=blog
+      - DB_USER=root
+      - DB_PASSWORD=root
+      - RUNNING_ON_HOST="{{.Node.Hostname}}"
+    networks:
+      - my-blog-overlay
+
+volumes:
+  my-blog-vol:
+    # This is a named volume for MySQL data.
+    # It keeps database files safe even if the MySQL container is removed.
+networks:
+  my-blog-overlay:
+    driver: overlay
