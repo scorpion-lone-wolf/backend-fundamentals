@@ -60,6 +60,8 @@ jobs:
           node-version: 22.x
           cache: npm # Pulls the node_modules straight from the cache created in Job 1
           cache-dependency-path: "week-14.1(CI-CD)/package-lock.json"
+      - name: Install dep
+        run: npm ci
       - name: Run Linter 🔍
         run: npm run lint
 
