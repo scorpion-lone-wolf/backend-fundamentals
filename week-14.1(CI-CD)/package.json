@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon -L server.js",
-    "lint": "npx eslint .",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "lint": "eslint .",
+    "test": "NODE_OPTIONS=\"$NODE_OPTIONS --experimental-vm-modules\" npx jest",
     "build": "echo 'No build required'",
     "prepare": "husky"
   },
