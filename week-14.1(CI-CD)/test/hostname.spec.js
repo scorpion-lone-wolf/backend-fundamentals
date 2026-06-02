@@ -1,4 +1,4 @@
-import { describe, expect } from "@jest/globals";
+import { describe, expect, it } from "@jest/globals";
 import { getHostName } from "../utils";
 describe("HostName", () => {
   it("Should return hostname", () => {
