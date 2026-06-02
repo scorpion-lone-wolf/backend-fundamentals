@@ -36,14 +36,18 @@ name: CI
 
 on:
   push:
+    branches: ["master"]
   pull_request:
+    branches: ["master"]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
+      # for copying code to the VM
       - uses: actions/checkout@v4
+      #   For installing node runtime
       - uses: actions/setup-node@v4
         with:
           node-version: 20
