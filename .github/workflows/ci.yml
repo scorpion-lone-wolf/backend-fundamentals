@@ -51,13 +51,16 @@ jobs:
     # DEPENDENCY: Tells GitHub to wait for the 'install-dep' job to pass.
     # If dependencies fail to install, this job won't waste time running.
     needs: install-dep
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
     steps:
       # CRITICAL: Because this is a brand new, isolated virtual machine,
       # we MUST check out the code and set up Node all over again.
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.x
+          node-version: ${{matrix.node-version}} # this job will run for e different node version
           cache: npm # Pulls the node_modules straight from the cache created in Job 1
           cache-dependency-path: "week-14.1(CI-CD)/package-lock.json"
       - name: Install dep
