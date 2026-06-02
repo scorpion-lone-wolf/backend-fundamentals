@@ -9,7 +9,11 @@ on:
     branches: ["master"]
     paths:
       - "backend-fundamentals/week-14.1(CI-CD)/**"
-
+# ADDED THIS: This tells EVERY job below to run their commands
+# inside your specific project directory. Without this, your scripts fail!
+defaults:
+  run:
+    working-directory: backend-fundamentals/week-14.1(CI-CD)
 jobs:
   # ==========================================
   # JOB 1: INSTALLATION & VERIFICATION
