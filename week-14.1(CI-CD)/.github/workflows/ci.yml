@@ -1,12 +1,12 @@
 name: bloggy app
 on:
   push:
-    branches: ["main"]
+    branches: ["master"]
     path:
       # This path filter ensures the pipeline only triggers when files inside this specific folder changes.
       - "backend-fundamentals/week-14.1(CI-CD)/**"
   pull_request:
-    branches: ["main"]
+    branches: ["master"]
     path:
       - "backend-fundamentals/week-14.1(CI-CD)/**"
 
