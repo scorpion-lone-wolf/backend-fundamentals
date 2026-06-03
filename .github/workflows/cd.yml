@@ -7,21 +7,21 @@ on:
 
 jobs:
   build-and-push:
-  runs-on: ubuntu-latest
-  needs: [lint, test, build] # makes sure all the jobs runs successfuly before running this one
-  steps:
-    - name: checkout the source code # checkout the source code to VM machine
-      uses: actions/checkout@v4
-    - name: login to docker hub # we will use github secret to login to docker hub so that we can push the image
-      uses: docker/login-action@v3
-      with:
-        username: ${{secrets.DOCKERHUB_USERNAME}}
-        password: ${{secrets.DOCKERHUB_TOKEN}}
-    - name: Build and push to Docker image
-      uses: docker/build-push-action@v7
-      with:
-        context: ./week-14.1(CI-CD)
-        files: ./week-14.1(CI-CD)/Dockerfile
-        push: true
-        platforms: linux/amd64
-        tags: ${{secrets.DOCKERHUB_USERNAME}}/bloggy-app:latest
+    runs-on: ubuntu-latest
+    needs: [lint, test, build] # makes sure all the jobs runs successfuly before running this one
+    steps:
+      - name: checkout the source code # checkout the source code to VM machine
+        uses: actions/checkout@v4
+      - name: login to docker hub # we will use github secret to login to docker hub so that we can push the image
+        uses: docker/login-action@v3
+        with:
+          username: ${{secrets.DOCKERHUB_USERNAME}}
+          password: ${{secrets.DOCKERHUB_TOKEN}}
+      - name: Build and push to Docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: ./week-14.1(CI-CD)
+          files: ./week-14.1(CI-CD)/Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/bloggy-app:latest
