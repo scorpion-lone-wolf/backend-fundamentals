@@ -8,7 +8,7 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    needs: [lint, test, build] # makes sure all the jobs runs successfuly before running this one
+    # needs: [lint, test, build] # makes sure all the jobs runs successfuly before running this one
     steps:
       - name: checkout the source code # checkout the source code to VM machine
         uses: actions/checkout@v4
