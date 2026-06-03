@@ -1,4 +1,4 @@
-name: Bloggy app
+name: "Bloggy app"
 on:
   push: # only trigger when a code is merged or pushed to respective branches
     branches: ["main"]
