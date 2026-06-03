@@ -5,6 +5,10 @@ on:
     paths:
       - "week-14.1(CI-CD)/**"
 
+defaults:
+  run:
+    working-directory: "week-14.1(CI-CD)"
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
