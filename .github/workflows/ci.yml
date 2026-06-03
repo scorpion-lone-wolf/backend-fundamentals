@@ -89,7 +89,7 @@ jobs:
     needs: [lint, test, build] # makes sure all the jobs runs successfuly before running this one
     steps:
       - name: checkout the source code # checkout the source code to VM machine
-        uses: action/checkout@v4
+        uses: actions/checkout@v4
       - name: login to docker hub # we will use github secret to login to docker hub so that we can push the image
         uses: docker/login-action@v3
         with:
