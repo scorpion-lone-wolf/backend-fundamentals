@@ -4,7 +4,6 @@ import pool from "./pool.js";
 import { getHostName, getVersion } from "./utils/index.js";
 
 const app = express();
-
 // handling route
 app.get("/blog", async (req, res) => {
   try {
