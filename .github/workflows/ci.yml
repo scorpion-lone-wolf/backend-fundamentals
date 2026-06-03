@@ -16,18 +16,17 @@ defaults:
     working-directory: "week-14.1(CI-CD)"
 jobs:
   # ==========================================
-  # JOB 1: INSTALLATION & VERIFICATION
+  # JOB 1: CODE QUALITY CHECK (LINT)
   # ==========================================
-  install-dep:
+  lint:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x] #run lint for all the given node version
     steps:
-      # Step 1.1: Clone the repository onto this virtual machine.
-      # The virtual machine starts completely empty. It does not have your project files.
-      # This official action clones your git repository onto the runner machine so following steps can read your code.
+      # CRITICAL: Because this is a brand new, isolated virtual machine,
+      # we MUST check out the code and set up Node all over again.
       - uses: actions/checkout@v4
-
-      # Step 1.2: Install Node 22 and set up the global npm cache.
-      # Installs the node runtime environment onto the virtual machine runner.
       - uses: actions/setup-node@v4
         with:
           node-version: 22.x
@@ -38,43 +37,18 @@ jobs:
           # GitHub creates a unique signature (hash) of this file. If the file doesn't change, it reuses the cache.
           # If you install a new package, this file changes, and GitHub knows to bypass the cache and do a fresh install.
           cache-dependency-path: "week-14.1(CI-CD)/package-lock.json"
-
-      # Step 1.3: Run clean install to verify package-lock.json is healthy.
-      - name: Install dependencies
-        run: npm ci
-
-  # ==========================================
-  # JOB 2: CODE QUALITY CHECK (LINT)
-  # ==========================================
-  lint:
-    runs-on: ubuntu-latest
-    # DEPENDENCY: Tells GitHub to wait for the 'install-dep' job to pass.
-    # If dependencies fail to install, this job won't waste time running.
-    needs: install-dep
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-    steps:
-      # CRITICAL: Because this is a brand new, isolated virtual machine,
-      # we MUST check out the code and set up Node all over again.
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{matrix.node-version}} # this job will run for e different node version
-          cache: npm # Pulls the node_modules straight from the cache created in Job 1
-          cache-dependency-path: "week-14.1(CI-CD)/package-lock.json"
       - name: Install dep
         run: npm ci
       - name: Run Linter 🔍
         run: npm run lint
 
   # ==========================================
-  # JOB 3: AUTOMATED TESTING
+  # JOB 2: AUTOMATED TESTING
   # ==========================================
   test:
     runs-on: ubuntu-latest
-    # DEPENDENCY: Runs in parallel with the 'lint' job, but only after 'install-dep' passes.
-    needs: install-dep
+    # DEPENDENCY: Runs in parallel with the other job but after lint is successfully completed.
+    needs: lint
     steps:
       # Spin up the environment fresh for testing
       - uses: actions/checkout@v4
@@ -83,16 +57,17 @@ jobs:
           node-version: 22.x
           cache: npm # Restores dependencies instantly from the shared cache
           cache-dependency-path: "week-14.1(CI-CD)/package-lock.json"
+
+      - name: Install dependencies
+        run: npm ci
       - name: Run Tests 🧪
         run: npm run test
 
   # ==========================================
-  # JOB 4: PRODUCTION COMPILATION (BUILD)
+  # JOB 3: PRODUCTION COMPILATION (BUILD)
   # ==========================================
   build:
     runs-on: ubuntu-latest
-    # DEPENDENCY: Runs in parallel with lint and test, only after 'install-dep' passes.
-    needs: install-dep
     steps:
       # Spin up the environment fresh for the build step
       - uses: actions/checkout@v4
@@ -101,5 +76,30 @@ jobs:
           node-version: 22.x
           cache: npm
           cache-dependency-path: "week-14.1(CI-CD)/package-lock.json"
+      - name: Install dependencies
+        run: npm ci
       - name: Build app 🏗️
         run: npm run build
+
+  # ========================================
+  # JOB 4: BUILD & PUSH TO REGISTRY (Continuous Delivery - Docker hub)
+  # ========================================
+  build-and-push:
+    run-on: ubuntu-latest
+    needs: [lint, test, build] # makes sure all the jobs runs successfuly before running this one
+    steps:
+      - name: checkout the source code # checkout the source code to VM machine
+        uses: action/checkout@v4
+      - name: login to docker hub # we will use github secret to login to docker hub so that we can push the image
+        uses: docker/login-action@v3
+        with:
+          username: ${{secret.DOCKERHUB_USERNAME}}
+          password: ${{secret.DOCKERHUB_TOKEN  }}
+      - name: Build and push to Docker image
+        uses: docker/build-push-action@v7
+        with:
+          context: ./week-14.1(CI-CD)
+          files: ./week-14.1(CI-CD)/Dockerfile
+          push: true
+          platforms: linux/amd64
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bloggy-app:latest
