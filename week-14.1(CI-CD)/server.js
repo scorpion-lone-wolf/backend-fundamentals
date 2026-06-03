@@ -30,6 +30,7 @@ app.get("/health", (req, res) => {
     status: "ok",
   });
 });
+
 app.listen(process.env.PORT || 3000, () => {
   console.log("My express started on port 3000");
 });
