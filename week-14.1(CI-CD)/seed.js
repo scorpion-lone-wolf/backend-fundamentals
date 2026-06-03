@@ -6,6 +6,7 @@ const DB_NAME = process.env.DB_NAME;
 async function seed() {
   // Get a single, dedicated connection from the pool
   const connection = await pool.getConnection();
+
   try {
     // 1. Corrected Syntax: Added 'S' to EXISTS
     await connection.query(`CREATE DATABASE IF NOT EXISTS ${DB_NAME}`);
