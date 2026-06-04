@@ -9,6 +9,7 @@ on:
     branches: ["master"]
     paths:
       - "week-14.1(CI-CD)/**"
+  workflow_dispatch:
 # ADDED THIS: This tells EVERY job below to run their commands
 # inside your specific project directory. Without this, your scripts fail!
 defaults:
@@ -121,6 +122,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "week-14.1(CI-CD)/compose.yml"
           target: "~/"
+
       - name: Deploy Stack toDocker Swarm via ssh
         uses: appleboy/ssh-action@v1.0.3
         with:
