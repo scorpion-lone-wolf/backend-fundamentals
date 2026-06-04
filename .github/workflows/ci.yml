@@ -131,4 +131,4 @@ jobs:
           key: ${{secrets.EC2_SSH_KEY}}
           script: |
             # Deploy or update the Swarm stack using the copied compose file
-            sudo docker stack deploy -c ~/"week-14.1(CI-CD)"/compose.yml my_test_stack
+            sudo docker stack deploy --resolve-image always -c ~/"week-14.1(CI-CD)"/compose.yml my_test_stack
