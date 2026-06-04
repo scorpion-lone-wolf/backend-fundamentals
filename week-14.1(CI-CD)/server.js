@@ -29,6 +29,7 @@ app.get("/blog", async (req, res) => {
 app.get("/health", (req, res) => {
   return res.json({
     status: "ok",
+    version: getVersion(),
   });
 });
 
