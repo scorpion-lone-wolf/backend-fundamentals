@@ -126,9 +126,9 @@ jobs:
       - name: Deploy Stack toDocker Swarm via ssh
         uses: appleboy/ssh-action@v1.0.3
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_SSH_KEY }}
+          host: ${{secrets.EC2_HOST}}
+          username: ${{secrets.EC2_USERNAME}}
+          key: ${{secrets.EC2_SSH_KEY}}
           script: |
             # Deploy or update the Swarm stack using the copied compose file
             sudo docker stack deploy -c ~/compose.yml my_test_stack
