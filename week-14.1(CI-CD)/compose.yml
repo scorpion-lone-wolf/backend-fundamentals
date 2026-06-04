@@ -31,7 +31,7 @@ services:
       - my-blog-overlay
 
   blog-server:
-    image: pursotam/myblog:latest
+    image: pursotam/bloggy-app:latest
     ports:
       - "3000:3000"
     deploy:
